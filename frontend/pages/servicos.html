@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Serviços de Direito Bancário do Dr Israel Ferreira." />
+    <title>Serviços | Direito Bancário</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <div class="brand"><span>Direito</span> Bancário</div>
+        <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="nav-links" aria-label="Navegação principal">
+          <a href="/">Home</a>
+          <a href="/pages/servicos.html">Serviços</a>
+          <a href="/pages/faq.html">FAQ</a>
+          <a href="/pages/contato.html">Contato</a>
+        </nav>
+        <a class="button button-primary nav-cta" href="https://wa.me/5584981286743" target="_blank" rel="noreferrer">
+          Agendar consulta
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section">
+        <div class="container">
+          <p class="eyebrow">Serviços</p>
+          <h1>Assessoria jurídica para proteger seus direitos financeiros.</h1>
+          <p class="lead">
+            A atuação do escritório é voltada a demandas bancárias e de consumo, com foco em análise técnica, defesa estratégica e resposta ágil às necessidades do cliente.
+          </p>
+        </div>
+      </section>
+
+      <section class="section alt-section">
+        <div class="container cards">
+          <article class="card">
+            <h3>Contratos bancários</h3>
+            <p>Análise de cláusulas, revisão de contratos e orientação sobre regularidade e riscos em operações financeiras.</p>
+          </article>
+          <article class="card">
+            <h3>Execução e cobrança</h3>
+            <p>Defesa em cobranças, execução hipotecária, juros abusivos e medidas de constrição indevidas.</p>
+          </article>
+          <article class="card">
+            <h3>Financiamentos</h3>
+            <p>Assessoria em operações de crédito, renegociação e revisão de condições contratuais com institutions financeiras.</p>
+          </article>
+          <article class="card">
+            <h3>Consumo e proteção do consumidor</h3>
+            <p>Atuação diante de práticas abusivas, cobranças irregulares e irregularidades em cartões e empréstimos.</p>
+          </article>
+          <article class="card">
+            <h3>Negativação indevida</h3>
+            <p>Orientação e estratégia para correção de registros no sistema de proteção ao crédito e seus impactos.</p>
+          </article>
+          <article class="card">
+            <h3>Consultoria preventiva</h3>
+            <p>Acompanhamento para evitar riscos futuros em relações com instituições financeiras e contratos de consumo.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div id="chatbot" class="chatbot" aria-live="polite">
+      <button id="chatbot-toggle" class="chatbot-toggle" type="button" aria-expanded="false">
+        Atendimento
+      </button>
+
+      <div id="chatbot-panel" class="chatbot-panel hidden">
+        <div class="chatbot-header">
+          <h3>Chatbot</h3>
+        </div>
+        <div id="chatbot-messages" class="chatbot-messages">
+          <div class="message bot">Olá! Como posso ajudar com os serviços?</div>
+        </div>
+        <div class="chatbot-actions">
+          <button type="button" class="option-btn" data-option="Dúvidas">Dúvidas</button>
+          <button type="button" class="option-btn" data-option="Orçamento">Orçamento</button>
+          <button type="button" class="option-btn" data-option="Falar com atendente">Atendente</button>
+        </div>
+        <form id="chatbot-form" class="chatbot-form">
+          <input id="chatbot-input" type="text" placeholder="Digite sua resposta..." aria-label="Resposta do chatbot" />
+          <button type="submit" class="button button-primary button-small">Enviar</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+CREATE TABLE IF NOT EXISTS leads (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(120) NOT NULL,
+  telefone VARCHAR(20) NOT NULL,
+  assunto VARCHAR(255) NOT NULL,
+  origem VARCHAR(50) NOT NULL DEFAULT 'site',
+  status VARCHAR(30) NOT NULL DEFAULT 'novo',
+  horario_preferido VARCHAR(50),
+  observacao TEXT,
+  canal VARCHAR(30) NOT NULL DEFAULT 'chatbot',
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS mensagens_chatbot (
+  id SERIAL PRIMARY KEY,
+  lead_id INTEGER,
+  tipo VARCHAR(20) NOT NULL,
+  mensagem TEXT NOT NULL,
+  etapa VARCHAR(50) NOT NULL,
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_lead_mensagem
+    FOREIGN KEY (lead_id)
+    REFERENCES leads(id)
+    ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS faq (
+  id SERIAL PRIMARY KEY,
+  pergunta TEXT NOT NULL,
+  resposta TEXT NOT NULL,
+  categoria VARCHAR(50) NOT NULL DEFAULT 'geral',
+  ativo BOOLEAN NOT NULL DEFAULT TRUE,
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS logs_whatsapp (
+  id SERIAL PRIMARY KEY,
+  lead_id INTEGER,
+  tipo_evento VARCHAR(50) NOT NULL,
+  payload JSON,
+  status VARCHAR(30) NOT NULL DEFAULT 'pendente',
+  criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_lead_log_whatsapp
+    FOREIGN KEY (lead_id)
+    REFERENCES leads(id)
+    ON DELETE SET NULL
+);

@@ -1,0 +1,27 @@
+{
+  "name": "atendimento-digital-mvp",
+  "version": "1.0.0",
+  "description": "Sistema de atendimento digital com site institucional e chatbot MVP",
+  "main": "backend/src/server.js",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "node --watch backend/src/server.js",
+    "check": "node --check backend/src/server.js && node --check backend/src/app.js"
+  },
+  "keywords": [
+    "site",
+    "chatbot",
+    "lead",
+    "whatsapp",
+    "express",
+    "postgres"
+  ],
+  "author": "Arquitetura inicial do projeto",
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^17.4.2",
+    "express": "^4.19.2",
+    "pg": "^8.12.0"
+  }
+}

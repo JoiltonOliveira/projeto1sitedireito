@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Direito Bancário e assessoria jurídica especializada em demandas financeiras." />
+    <title>Direito Bancário | Dr Israel Ferreira</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <div class="brand"><span>Direito</span> Bancário</div>
+        <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="nav-links" aria-label="Navegação principal">
+          <a href="/">Home</a>
+          <a href="/pages/servicos.html">Serviços</a>
+          <a href="/pages/faq.html">FAQ</a>
+          <a href="/pages/contato.html">Contato</a>
+        </nav>
+        <a class="button button-primary nav-cta" href="https://wa.me/5584981286743" target="_blank" rel="noreferrer">
+          Agendar consulta
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div>
+            <p class="eyebrow">Atendimento moderno</p>
+            <h1>Seu atendimento mais profissional, organizado e sempre disponível.</h1>
+            <p class="lead">
+              Ajudamos pequenas empresas a receber clientes com mais clareza, reduzir mensagens fora de hora e organizar cada contato em um canal único.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="/pages/contato.html">Solicitar orçamento</a>
+              <a class="button button-secondary" href="/pages/servicos.html">Conhecer serviços</a>
+            </div>
+          </div>
+
+          <div class="hero-card">
+            <h2>Atendimento digital em 3 etapas</h2>
+            <ul>
+              <li>Recebemos o contato</li>
+              <li>Qualificamos a demanda</li>
+              <li>Encaminhamos para o WhatsApp ou equipe</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <h2>Por que escolher nosso sistema?</h2>
+          <div class="cards">
+            <article class="card">
+              <h3>Organização</h3>
+              <p>Todos os contatos ficam centralizados e com histórico de atendimento, reduzindo perdas e repetições.</p>
+            </article>
+            <article class="card">
+              <h3>Disponibilidade</h3>
+              <p>O chatbot pode responder perguntas básicas 24 horas por dia e registrar o cliente mesmo fora do expediente.</p>
+            </article>
+            <article class="card">
+              <h3>Melhor experiência</h3>
+              <p>O cliente acessa um canal mais profissional e a equipe entrega um serviço mais claro e eficiente.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt-section">
+        <div class="container">
+          <h2>Como funciona</h2>
+          <div class="cards">
+            <article class="card">
+              <h3>1. Cliente acessa</h3>
+              <p>O visitante entra no site e encontra uma mensagem de boas-vindas e opções de atendimento.</p>
+            </article>
+            <article class="card">
+              <h3>2. Chatbot orienta</h3>
+              <p>O bot responde dúvidas frequentes e coleta nome, telefone e o assunto principal da demanda.</p>
+            </article>
+            <article class="card">
+              <h3>3. Equipe responde</h3>
+              <p>O contato entra em um painel organizado para que a equipe conduza o atendimento de forma clara.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="chatbot" class="chatbot" aria-live="polite">
+      <button id="chatbot-toggle" class="chatbot-toggle" type="button" aria-expanded="false">
+        Atendimento
+      </button>
+
+      <div id="chatbot-panel" class="chatbot-panel hidden">
+        <div class="chatbot-header">
+          <h3>Chatbot</h3>
+        </div>
+        <div id="chatbot-messages" class="chatbot-messages">
+          <div class="message bot">Olá! Sou o assistente digital. Como posso te ajudar?</div>
+        </div>
+        <div class="chatbot-actions">
+          <button type="button" class="option-btn" data-option="Dúvidas">Dúvidas</button>
+          <button type="button" class="option-btn" data-option="Orçamento">Orçamento</button>
+          <button type="button" class="option-btn" data-option="Falar com atendente">Atendente</button>
+        </div>
+        <form id="chatbot-form" class="chatbot-form">
+          <input id="chatbot-input" type="text" placeholder="Digite sua resposta..." aria-label="Resposta do chatbot" />
+          <button type="submit" class="button button-primary button-small">Enviar</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+  </body>
+</html>

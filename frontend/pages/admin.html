@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel de Leads | Direito Bancário</title>
+    <link rel="stylesheet" href="../css/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <div class="brand"><span>Direito</span> Bancário</div>
+        <button class="nav-toggle" type="button" aria-label="Abrir menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <nav class="nav-links" aria-label="Navegação do painel">
+          <a href="/">Home</a>
+          <a href="/pages/servicos.html">Serviços</a>
+          <a href="/pages/faq.html">FAQ</a>
+          <a href="/pages/contato.html">Contato</a>
+        </nav>
+        <button id="logout-btn" class="button button-primary nav-cta" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main class="admin-shell">
+      <div class="container">
+        <div class="admin-header">
+          <div>
+            <p class="eyebrow">Dashboard</p>
+            <h1>Leads e relatórios</h1>
+          </div>
+          <div class="admin-intro-card">
+            <strong>Bem-vindo ao painel</strong>
+            <span>Monitore o atendimento em tempo real.</span>
+          </div>
+        </div>
+
+        <section class="stats-grid" aria-label="Resumo do atendimento">
+          <article class="stat-card">
+            <h3>Total de leads</h3>
+            <p id="total-leads" class="stat-value">0</p>
+          </article>
+          <article class="stat-card">
+            <h3>Novos</h3>
+            <p id="novos-leads" class="stat-value">0</p>
+          </article>
+          <article class="stat-card">
+            <h3>Em atendimento</h3>
+            <p id="atendimento-leads" class="stat-value">0</p>
+          </article>
+          <article class="stat-card">
+            <h3>Finalizados</h3>
+            <p id="finalizados-leads" class="stat-value">0</p>
+          </article>
+        </section>
+
+        <section class="panel-filters" aria-label="Filtros dos leads">
+          <div class="filter-group">
+            <label for="search-leads">Buscar</label>
+            <input id="search-leads" type="search" placeholder="Nome, telefone ou assunto" />
+          </div>
+          <div class="filter-group">
+            <label for="status-filter">Status</label>
+            <select id="status-filter">
+              <option value="todos">Todos</option>
+              <option value="novo">Novo</option>
+              <option value="em_atendimento">Em atendimento</option>
+              <option value="finalizado">Finalizado</option>
+            </select>
+          </div>
+          <button id="refresh-leads" class="button button-secondary" type="button">Atualizar</button>
+        </section>
+
+        <section class="table-wrap" aria-label="Lista de leads">
+          <table class="leads-table">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Telefone</th>
+                <th>Assunto</th>
+                <th>Origem</th>
+                <th>Status</th>
+                <th>Atualizado em</th>
+              </tr>
+            </thead>
+            <tbody id="leads-body"></tbody>
+          </table>
+          <div id="empty-state" class="empty-state hidden">Nenhum lead encontrado.</div>
+        </section>
+      </div>
+    </main>
+
+    <script src="../js/main.js"></script>
+    <script>
+      const apiBase = window.location.protocol === 'file:' ? 'http://localhost:3000' : '';
+      const searchInput = document.getElementById('search-leads');
+      const statusFilter = document.getElementById('status-filter');
+      const refreshButton = document.getElementById('refresh-leads');
+      let leadsCache = [];
+
+      function getStatusLabel(status) {
+        const labels = {
+          novo: 'Novo',
+          em_atendimento: 'Em atendimento',
+          finalizado: 'Finalizado',
+        };
+
+        return labels[status] || 'Novo';
+      }
+
+      function aplicarFiltros() {
+        const termo = (searchInput?.value || '').trim().toLowerCase();
+        const filtroStatus = statusFilter?.value || 'todos';
+
+        const leadsFiltrados = leadsCache.filter((lead) => {
+          const textoBusca = [lead.nome, lead.telefone, lead.assunto].join(' ').toLowerCase();
+          const bateBusca = !termo || textoBusca.includes(termo);
+          const bateStatus = filtroStatus === 'todos' || (lead.status || 'novo') === filtroStatus;
+          return bateBusca && bateStatus;
+        });
+
+        renderLeads(leadsFiltrados);
+      }
+
+      function renderLeads(leads) {
+        const tbody = document.getElementById('leads-body');
+        const emptyState = document.getElementById('empty-state');
+        tbody.innerHTML = '';
+
+        if (!leads || leads.length === 0) {
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        emptyState.classList.add('hidden');
+
+        leads.forEach((lead) => {
+          const row = document.createElement('tr');
+          const statusClass = `status-${lead.status || 'novo'}`;
+          const updatedAt = lead.atualizado_em ? new Date(lead.atualizado_em).toLocaleString('pt-BR') : '—';
+
+          row.innerHTML = `
+            <td>${lead.nome || '—'}</td>
+            <td>${lead.telefone || '—'}</td>
+            <td>${lead.assunto || '—'}</td>
+            <td>${lead.origem || 'site'}</td>
+            <td>
+              <span class="status-badge ${statusClass}">${getStatusLabel(lead.status || 'novo')}</span>
+              <select class="status-select" data-id="${lead.id}" aria-label="Atualizar status do lead">
+                <option value="novo" ${lead.status === 'novo' ? 'selected' : ''}>Novo</option>
+                <option value="em_atendimento" ${lead.status === 'em_atendimento' ? 'selected' : ''}>Em atendimento</option>
+                <option value="finalizado" ${lead.status === 'finalizado' ? 'selected' : ''}>Finalizado</option>
+              </select>
+            </td>
+            <td>${updatedAt}</td>
+          `;
+
+          tbody.appendChild(row);
+        });
+
+        document.querySelectorAll('.status-select').forEach((select) => {
+          select.addEventListener('change', async (event) => {
+            const id = event.target.dataset.id;
+            const status = event.target.value;
+
+            try {
+const response = await fetch(`${apiBase}/api/leads/${id}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status }),
+              });
+
+              const result = await response.json();
+
+              if (!response.ok || !result.ok) {
+                throw new Error(result.message || 'Erro ao atualizar status');
+              }
+
+              await carregarResumo();
+              await carregarLeads();
+            } catch (error) {
+              console.error(error);
+              alert(error.message || 'Não foi possível atualizar o status do lead.');
+            }
+          });
+        });
+      }
+
+      async function carregarResumo() {
+        try {
+          const response = await fetch(`${apiBase}/api/relatorios/resumo`);
+          const result = await response.json();
+
+          if (!response.ok || !result.ok) {
+            throw new Error(result.message || 'Erro ao carregar resumo');
+          }
+
+          const total = Number(result.data.totalLeads || 0);
+          const porStatus = result.data.porStatus || [];
+
+          document.getElementById('total-leads').textContent = total;
+
+          const statusMap = {
+            novo: 0,
+            em_atendimento: 0,
+            finalizado: 0,
+          };
+
+          porStatus.forEach((item) => {
+            if (statusMap[item.status] !== undefined) {
+              statusMap[item.status] = Number(item.total || 0);
+            }
+          });
+
+          document.getElementById('novos-leads').textContent = statusMap.novo;
+          document.getElementById('atendimento-leads').textContent = statusMap.em_atendimento;
+          document.getElementById('finalizados-leads').textContent = statusMap.finalizado;
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      async function carregarLeads() {
+        try {
+          const response = await fetch(`${apiBase}/api/leads`);
+          const result = await response.json();
+
+          if (!response.ok || !result.ok) {
+            throw new Error(result.message || 'Erro ao carregar leads');
+          }
+
+          leadsCache = Array.isArray(result.data) ? result.data : [];
+          aplicarFiltros();
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      searchInput?.addEventListener('input', aplicarFiltros);
+      statusFilter?.addEventListener('change', aplicarFiltros);
+      refreshButton?.addEventListener('click', async () => {
+        await carregarResumo();
+        await carregarLeads();
+      });
+
+      carregarResumo();
+      carregarLeads();
+
+      // Logout functionality
+      document.getElementById('logout-btn')?.addEventListener('click', async () => {
+        try {
+          const response = await fetch(`${apiBase}/api/auth/logout`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+          });
+
+          const result = await response.json();
+
+          if (!response.ok || !result.ok) {
+            throw new Error(result.message || 'Erro ao fazer logout');
+          }
+
+          window.location.href = '/login';
+        } catch (error) {
+          console.error(error);
+          alert(error.message || 'Não foi possível fazer logout.');
+        }
+      });
+
+      // Check authentication on page load
+      (async () => {
+        try {
+          const response = await fetch('/admin');
+          if (response.status === 401) {
+            window.location.href = '/login';
+          }
+        } catch (error) {
+          console.error('Erro ao verificar autenticação:', error);
+        }
+      })();
+    </script>
+  </body>
+</html>
