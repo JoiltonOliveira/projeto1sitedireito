@@ -270,17 +270,7 @@ const response = await fetch(`${apiBase}/api/leads/${id}/status`, {
         }
       });
 
-      // Check authentication on page load
-      (async () => {
-        try {
-          const response = await fetch('/admin');
-          if (response.status === 401) {
-            window.location.href = '/login';
-          }
-        } catch (error) {
-          console.error('Erro ao verificar autenticação:', error);
-        }
-      })();
+      // Authentication is enforced by the server; the page loads only when the session is valid.
     </script>
   </body>
 </html>

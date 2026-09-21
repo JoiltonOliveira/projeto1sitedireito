@@ -157,16 +157,7 @@
         }
       });
 
-      // Redirect to login if already logged in
-      fetch(`${apiBase}/admin`)
-        .then((response) => {
-          if (response.ok) {
-            window.location.href = '/admin';
-          }
-        })
-        .catch(() => {
-          // Not logged in, stay on login page
-        });
+      // Admin access is controlled by the server-side session check.
     </script>
   </body>
 </html>

@@ -6,7 +6,8 @@ async function listarLeads(req, res) {
     res.status(200).json({ ok: true, data: leads });
   } catch (error) {
     console.error('Erro ao listar leads:', error);
-    res.status(500).json({ ok: false, message: 'Não foi possível listar os leads.' });
+    const statusCode = error.statusCode || 500;
+    res.status(statusCode).json({ ok: false, message: error.message || 'Não foi possível listar os leads.' });
   }
 }
 
@@ -16,7 +17,7 @@ async function criarLead(req, res) {
     res.status(201).json({ ok: true, data: lead, message: 'Lead registrado com sucesso.' });
   } catch (error) {
     console.error('Erro ao criar lead:', error);
-    const statusCode = error.message === 'Lead não encontrado.' ? 404 : 400;
+    const statusCode = error.statusCode || (error.message === 'Lead não encontrado.' ? 404 : 400);
     res.status(statusCode).json({ ok: false, message: error.message || 'Não foi possível registrar o lead.' });
   }
 }

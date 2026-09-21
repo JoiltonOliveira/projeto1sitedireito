@@ -1,6 +1,42 @@
 const { createSession, destroySession } = require('../middleware/auth');
+const { timingSafeEqual, scryptSync } = require('node:crypto');
 
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin';
+function getConfiguredPassword() {
+  return process.env.ADMIN_PASSWORD_HASH || process.env.ADMIN_PASSWORD || 'admin';
+}
+
+function hashPassword(password, salt) {
+  return scryptSync(password, salt, 64).toString('hex');
+}
+
+function comparePassword(password, targetPassword) {
+  if (!password || typeof password !== 'string') {
+    return false;
+  }
+
+  if (!targetPassword || typeof targetPassword !== 'string') {
+    return false;
+  }
+
+  if (targetPassword.startsWith('scrypt:')) {
+    const [, salt, hash] = targetPassword.split(':');
+    if (!salt || !hash) {
+      return false;
+    }
+
+    const candidateHash = hashPassword(password, salt);
+    const a = Buffer.from(hash, 'hex');
+    const b = Buffer.from(candidateHash, 'hex');
+
+    if (a.length !== b.length) {
+      return false;
+    }
+
+    return timingSafeEqual(a, b);
+  }
+
+  return password === targetPassword;
+}
 
 async function login(req, res) {
   try {
@@ -10,7 +46,8 @@ async function login(req, res) {
       return res.status(400).json({ ok: false, message: 'Senha é obrigatória.' });
     }
 
-    if (password !== ADMIN_PASSWORD) {
+    const targetPassword = getConfiguredPassword();
+    if (!comparePassword(password, targetPassword)) {
       return res.status(401).json({ ok: false, message: 'Senha inválida.' });
     }
 

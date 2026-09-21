@@ -1,14 +1,24 @@
 const { Pool } = require('pg');
 const memoryStore = require('./memoryStore');
 
-const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/atendimento_digital';
+const connectionString = process.env.DATABASE_URL || 'postgresql://postgres:joiltondev@localhost:5432/atendimento_digital';
 
 const pool = new Pool({
   connectionString,
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
+function buildDatabaseUnavailableError() {
+  const error = new Error(
+    'Banco de dados indisponível. Configure DATABASE_URL corretamente e verifique se o PostgreSQL está ativo.'
+  );
+  error.statusCode = 503;
+  return error;
+}
+
 async function query(text, params) {
+  const canUseMemoryFallback = process.env.ALLOW_MEMORY_FALLBACK !== 'false';
+
   try {
     const client = await pool.connect();
 
@@ -18,6 +28,10 @@ async function query(text, params) {
       client.release();
     }
   } catch (error) {
+    if (!canUseMemoryFallback) {
+      throw buildDatabaseUnavailableError();
+    }
+
     if (text.toLowerCase().includes('insert into leads') || text.toLowerCase().includes('select * from leads')) {
       return {
         rows: text.toLowerCase().includes('insert into leads')

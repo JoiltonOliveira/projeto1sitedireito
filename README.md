@@ -33,4 +33,5 @@ Este projeto é um MVP de site institucional com chatbot, gestão de leads e est
 
 - O projeto está em etapa inicial de estruturação.
 - O banco de dados deve ser configurado conforme o ambiente local ou de produção.
-- O foco atual é a base funcional do MVP.
+- O fallback em memória é permitido apenas para ambiente de demonstração e pode ser desligado com `ALLOW_MEMORY_FALLBACK=false`.
+- Para uso real, o PostgreSQL deve estar ativo e a variável `DATABASE_URL` precisa apontar para o banco correto.

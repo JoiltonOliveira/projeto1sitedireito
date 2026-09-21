@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const navToggle = document.querySelector('.nav-toggle');
   const navLinks = document.querySelector('.nav-links');
   const form = document.getElementById('lead-form');
+  const formFeedback = form ? form.querySelector('.form-feedback') : null;
   const chatbotToggle = document.getElementById('chatbot-toggle');
   const chatbotPanel = document.getElementById('chatbot-panel');
   const optionButtons = document.querySelectorAll('.option-btn');
@@ -135,7 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
       };
 
       if (!payload.nome || !payload.telefone || !payload.assunto) {
-        alert('Preencha nome, telefone e assunto para enviar sua mensagem.');
+        if (formFeedback) {
+          formFeedback.textContent = 'Preencha nome, telefone e assunto para enviar sua mensagem.';
+          formFeedback.className = 'form-feedback show error';
+        }
         return;
       }
 
@@ -152,11 +156,23 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error(result.message || 'Erro ao enviar formulário.');
         }
 
-        alert(result.message || 'Contato enviado com sucesso!');
         form.reset();
+
+        if (formFeedback) {
+          formFeedback.textContent = result.message || 'Contato enviado com sucesso!';
+          formFeedback.className = 'form-feedback show success';
+        } else {
+          alert(result.message || 'Contato enviado com sucesso!');
+        }
       } catch (error) {
         console.error(error);
-        alert(error.message || 'Não foi possível enviar o formulário.');
+
+        if (formFeedback) {
+          formFeedback.textContent = error.message || 'Não foi possível enviar o formulário.';
+          formFeedback.className = 'form-feedback show error';
+        } else {
+          alert(error.message || 'Não foi possível enviar o formulário.');
+        }
       }
     });
   }
